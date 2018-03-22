@@ -323,7 +323,7 @@
 				headerHeight = getHeaderHeight(fixedHeader);
 			}
 
-			var preOffset = parseInt(animateSettings.preOffset(), 10);
+			var preOffset = parseInt(animateSettings.preOffset(anchor, toggle), 10);
 			if (isNaN(preOffset) || typeof preOffset !== 'number') {
 				preOffset = 0;
 			}
