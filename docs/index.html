@@ -95,7 +95,7 @@
 		<script>
 			var scroll = new SmoothScroll('a[href*="#"]:not([data-easing])');
 
-			var linear = new SmoothScroll('[data-easing="linear"]', {easing: 'linear'});
+			var linear = new SmoothScroll('[data-easing="linear"]', {easing: 'linear', preOffset: function() { console.log('preoffset'); return 500;}});
 
 			var easeInQuad = new SmoothScroll('[data-easing="easeInQuad"]', {easing: 'easeInQuad'});
 			var easeInCubic = new SmoothScroll('[data-easing="easeInCubic"]', {easing: 'easeInCubic'});

@@ -1,6 +1,6 @@
 /*!
  * smooth-scroll v12.1.5: Animate scrolling to anchor links
- * (c) 2017 Chris Ferdinandi
+ * (c) 2018 Chris Ferdinandi
  * MIT License
  * http://github.com/cferdinandi/smooth-scroll
  */
@@ -97,6 +97,7 @@ if (window.Element && !Element.prototype.closest) {
 		customEasing: null,
 
 		// Callback API
+		preOffset: function () { return 0; },
 		before: function () {},
 		after: function () {}
 	};
@@ -115,7 +116,6 @@ if (window.Element && !Element.prototype.closest) {
 
 		// Variables
 		var extended = {};
-		var deep = false;
 		var i = 0;
 		var length = arguments.length;
 
@@ -380,7 +380,14 @@ if (window.Element && !Element.prototype.closest) {
 				// Get the height of a fixed header if one exists and not already set
 				headerHeight = getHeaderHeight(fixedHeader);
 			}
-			var endLocation = isNum ? anchor : getEndLocation(anchorElem, headerHeight, parseInt((typeof animateSettings.offset === 'function' ? animateSettings.offset() : animateSettings.offset), 10)); // Location to scroll to
+
+			var preOffset = parseInt(animateSettings.preOffset(), 10);
+			if (isNaN(preOffset) || typeof preOffset !== 'number') {
+				preOffset = 0;
+			}
+
+			var offset = parseInt((typeof animateSettings.offset === 'function' ? animateSettings.offset() + preOffset : animateSettings.offset + preOffset), 10);
+			var endLocation = isNum ? anchor : getEndLocation(anchorElem, headerHeight, offset); // Location to scroll to
 			var distance = endLocation - startLocation; // distance to travel
 			var documentHeight = getDocumentHeight();
 			var timeLapsed = 0;
