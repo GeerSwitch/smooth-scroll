@@ -39,6 +39,7 @@
 		customEasing: null,
 
 		// Callback API
+		preOffset: function() {},
 		before: function () {},
 		after: function () {}
 	};
@@ -322,10 +323,13 @@
 				headerHeight = getHeaderHeight(fixedHeader);
 			}
 
-			// Run callback before animation starts
-			animateSettings.before(anchor, toggle);
+			var preOffset = parseInt(animateSettings.preOffset(anchor, toggle), 10);
+			if (isNaN(preOffset) || typeof preOffset !== 'number') {
+				preOffset = 0;
+			}
 
-			var endLocation = isNum ? anchor : getEndLocation(anchorElem, headerHeight, parseInt((typeof animateSettings.offset === 'function' ? animateSettings.offset() : animateSettings.offset), 10)); // Location to scroll to
+			var offset = parseInt((typeof animateSettings.offset === 'function' ? animateSettings.offset() + preOffset : animateSettings.offset + preOffset), 10);
+			var endLocation = isNum ? anchor : getEndLocation(anchorElem, headerHeight, offset); // Location to scroll to
 			var distance = endLocation - startLocation; // distance to travel
 			var documentHeight = getDocumentHeight();
 			var timeLapsed = 0;
@@ -385,6 +389,9 @@
 			if (window.pageYOffset === 0) {
 				window.scrollTo( 0, 0 );
 			}
+
+			// Run callback before animation starts
+			animateSettings.before(anchor, toggle);
 
 			// Start scrolling animation
 			smoothScroll.cancelScroll();
